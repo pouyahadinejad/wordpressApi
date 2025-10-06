@@ -90,6 +90,8 @@ class _SignupPageState extends State<SignupPage> {
                               height: 2.0,
                             ),
                             decoration: InputDecoration(
+                              errorStyle:
+                                  const TextStyle(color: Colors.redAccent),
                               hintTextDirection: TextDirection.ltr,
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -156,6 +158,12 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                             ),
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'این فیلد باید تکمیل شود';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         const SizedBox(height: 30.0),
@@ -195,12 +203,19 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                             ),
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'این فیلد باید تکمیل شود';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         const SizedBox(height: 30.0),
                         Directionality(
                           textDirection: TextDirection.rtl,
                           child: TextFormField(
+                            obscureText: true,
                             initialValue: customerModel.password,
                             onChanged: (value) {
                               customerModel.password = value;
@@ -233,6 +248,12 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                             ),
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'این فیلد باید تکمیل شود';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         const SizedBox(height: 20.0),
@@ -249,8 +270,14 @@ class _SignupPageState extends State<SignupPage> {
                               onPressed: () {
                                 if (globalKey.currentState!.validate()) {
                                   debugPrint('${customerModel.toJson()}');
+                                  setState(() {
+                                    isApiCalled = true;
+                                  });
                                   apiService.createCustomer(customerModel).then(
                                     (retRes) {
+                                      setState(() {
+                                        isApiCalled = false;
+                                      });
                                       if (retRes) {
                                         showDialog(
                                           context: context,
@@ -321,7 +348,17 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             )
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 30.0),
+                        isApiCalled
+                            ? const Text(
+                                "لطفا منتظر بمانید ...",
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                ),
+                              )
+                            : const Text(""),
                       ],
                     ),
                   ),
