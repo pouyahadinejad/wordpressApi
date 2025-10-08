@@ -3,6 +3,8 @@ import 'package:plantapp/api/api_service.dart';
 import 'package:plantapp/constans/constans.dart';
 import 'package:plantapp/models/woocommercr/register_model.dart';
 import 'package:plantapp/ui/signup/custom_form_field.dart';
+import 'package:plantapp/ui/utils/custom_dialog_box.dart';
+import 'package:plantapp/ui/utils/extensions.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -119,6 +121,9 @@ class _SignupPageState extends State<SignupPage> {
                             if (value.toString().isEmpty) {
                               return 'این فیلد باید تکمیل شود';
                             }
+                            if (!value!.isValidEmail) {
+                              return "ایمیل صحیح نمی باشد";
+                            }
                             return null;
                           },
                         ),
@@ -133,6 +138,9 @@ class _SignupPageState extends State<SignupPage> {
                           validator: (value) {
                             if (value.toString().isEmpty) {
                               return 'این فیلد باید تکمیل شود';
+                            }
+                            if (!value!.isValidPassword) {
+                              return "پسورد قوی نم باشد";
                             }
                             return null;
                           },
@@ -160,41 +168,23 @@ class _SignupPageState extends State<SignupPage> {
                                         isApiCalled = false;
                                       });
                                       if (retRes) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text('Woocomerce'),
-                                              content: const Text(
-                                                  'Registration SuccessFull'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('ok'),
-                                                )
-                                              ],
-                                            );
+                                        CustomDialogBox.showMessage(
+                                          context,
+                                          "ثبت نام موفق",
+                                          "ثبت نام شما با موفقیت انجام شد",
+                                          "بستن",
+                                          () {
+                                            Navigator.pop(context);
                                           },
                                         );
                                       } else {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: const Text('Woocomerce'),
-                                              content: const Text(
-                                                  'Registration error'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('ok'),
-                                                )
-                                              ],
-                                            );
+                                        CustomDialogBox.showMessage(
+                                          context,
+                                          "ثبت نام ناموفق",
+                                          "ایمیلی که استفاده کردید تکراری است",
+                                          "بستن",
+                                          () {
+                                            Navigator.pop(context);
                                           },
                                         );
                                       }
