@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:plantapp/api/api_service.dart';
 import 'package:plantapp/constans/constans.dart';
 import 'package:plantapp/models/woocommercr/register_model.dart';
-import 'package:plantapp/ui/signup/custom_form_field.dart';
 import 'package:plantapp/ui/utils/custom_dialog_box.dart';
 import 'package:plantapp/ui/utils/customer_appbar.dart';
 import 'package:plantapp/ui/utils/extensions.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<LoginPage> createState() => _SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageState extends State<LoginPage> {
   late ApiService apiService;
   late CustomerModel customerModel;
   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+
+  TextEditingController email = TextEditingController(text: 'sara@gmail.com');
+
+  TextEditingController password =
+      TextEditingController(text: 'q#QxqodJOAxOd)EmI^^5GOEv');
 
   bool isApiCalled = false;
   @override
@@ -34,7 +38,7 @@ class _SignupPageState extends State<SignupPage> {
       body: Stack(
         children: [
           const BuildCustomAppBar(
-            appBarTitle: "ثبت نام",
+            appBarTitle: "ورد به برنامه",
           ),
           Positioned(
             top: 150.0,
@@ -50,70 +54,106 @@ class _SignupPageState extends State<SignupPage> {
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        CustomerFormField(
-                          labelName: 'نام',
+                        Directionality(
                           textDirection: TextDirection.rtl,
-                          initialValue: customerModel.firstName,
-                          onChanged: (value) {
-                            customerModel.firstName = value;
-                          },
-                          validator: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'این فیلد باید تکمیل شود';
-                            }
-                            return null;
-                          },
+                          child: TextFormField(
+                            controller: email,
+                            initialValue: customerModel.email,
+                            onChanged: (value) {
+                              customerModel.email = value;
+                            },
+                            cursorColor: Constans.primaryColor,
+                            style: const TextStyle(
+                              fontSize: 20.0,
+                              height: 2.0,
+                            ),
+                            textDirection: TextDirection.ltr,
+                            decoration: InputDecoration(
+                              errorStyle:
+                                  const TextStyle(color: Colors.redAccent),
+                              hintTextDirection: TextDirection.rtl,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Constans.primaryColor,
+                                  width: 2.0,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 15.0,
+                                vertical: 15.0,
+                              ),
+                              label: Text(
+                                "ایمیل",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Constans.primaryColor,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'این فیلد باید تکمیل شود';
+                              }
+                              if (!value!.isValidEmail) {
+                                return "ایمیل صحیح نمی باشد";
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        const SizedBox(height: 30.0),
-                        CustomerFormField(
-                          labelName: 'نام خانوادگی',
+                        const SizedBox(height: 20.0),
+                        Directionality(
                           textDirection: TextDirection.rtl,
-                          initialValue: customerModel.lastName,
-                          onChanged: (value) {
-                            customerModel.lastName = value;
-                          },
-                          validator: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'این فیلد باید تکمیل شود';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 30.0),
-                        CustomerFormField(
-                          labelName: 'ایمیل',
-                          textDirection: TextDirection.ltr,
-                          initialValue: customerModel.email,
-                          onChanged: (value) {
-                            customerModel.email = value;
-                          },
-                          validator: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'این فیلد باید تکمیل شود';
-                            }
-                            if (!value!.isValidEmail) {
-                              return "ایمیل صحیح نمی باشد";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 30.0),
-                        CustomerFormField(
-                          labelName: 'پسورد',
-                          textDirection: TextDirection.ltr,
-                          initialValue: customerModel.password,
-                          onChanged: (value) {
-                            customerModel.password = value;
-                          },
-                          validator: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'این فیلد باید تکمیل شود';
-                            }
-                            if (!value!.isValidPassword) {
-                              return "پسورد قوی نم باشد";
-                            }
-                            return null;
-                          },
+                          child: TextFormField(
+                            controller: password,
+                            initialValue: customerModel.password,
+                            onChanged: (value) {
+                              customerModel.email = value;
+                            },
+                            cursorColor: Constans.primaryColor,
+                            style: const TextStyle(
+                              fontSize: 20.0,
+                              height: 2.0,
+                            ),
+                            textDirection: TextDirection.ltr,
+                            decoration: InputDecoration(
+                              errorStyle:
+                                  const TextStyle(color: Colors.redAccent),
+                              hintTextDirection: TextDirection.rtl,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Constans.primaryColor,
+                                  width: 2.0,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 15.0,
+                                vertical: 15.0,
+                              ),
+                              label: Text(
+                                "پسورد",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Constans.primaryColor,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'این فیلد باید تکمیل شود';
+                              }
+                              if (!value!.isValidEmail) {
+                                return "ایمیل صحیح نمی باشد";
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                         const SizedBox(height: 20.0),
                         Row(
