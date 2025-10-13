@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:plantapp/api/api_service.dart';
 import 'package:plantapp/constans/constans.dart';
 import 'package:plantapp/models/woocommercr/register_model.dart';
+import 'package:plantapp/ui/root/root_page.dart';
+import 'package:plantapp/ui/signup/signup_page.dart';
 import 'package:plantapp/ui/utils/custom_dialog_box.dart';
 import 'package:plantapp/ui/utils/customer_appbar.dart';
 import 'package:plantapp/ui/utils/extensions.dart';
@@ -144,15 +147,15 @@ class _SignupPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            validator: (value) {
-                              if (value.toString().isEmpty) {
-                                return 'این فیلد باید تکمیل شود';
-                              }
-                              if (!value!.isValidEmail) {
-                                return "ایمیل صحیح نمی باشد";
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value.toString().isEmpty) {
+                            //     return 'این فیلد باید تکمیل شود';
+                            //   }
+                            //   if (!value!.isValidEmail) {
+                            //     return "ایمیل صحیح نمی باشد";
+                            //   }
+                            //   return null;
+                            // },
                           ),
                         ),
                         const SizedBox(height: 20.0),
@@ -168,30 +171,45 @@ class _SignupPageState extends State<LoginPage> {
                               ),
                               onPressed: () {
                                 if (globalKey.currentState!.validate()) {
-                                  debugPrint('${customerModel.toJson()}');
+                                  // debugPrint('${customerModel.toJson()}');
                                   setState(() {
                                     isApiCalled = true;
                                   });
-                                  apiService.createCustomer(customerModel).then(
+                                  apiService
+                                      .loginCustomer(
+                                    email.text,
+                                    password.text,
+                                  )
+                                      .then(
                                     (retRes) {
+                                      // debugPrint(retRes.data!.token.toString());
+                                      // debugPrint(
+                                      //     retRes.data!.toJson().toString());
                                       setState(() {
                                         isApiCalled = false;
                                       });
-                                      if (retRes) {
+                                      if (retRes.success!) {
                                         CustomDialogBox.showMessage(
                                           context,
-                                          "ثبت نام موفق",
-                                          "ثبت نام شما با موفقیت انجام شد",
+                                          "موفقیت امیز",
+                                          "ورود با موفقیت انجام شد",
                                           "بستن",
                                           () {
-                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                child: const RootPage(),
+                                                type: PageTransitionType
+                                                    .leftToRight,
+                                              ),
+                                            );
                                           },
                                         );
                                       } else {
                                         CustomDialogBox.showMessage(
                                           context,
-                                          "ثبت نام ناموفق",
-                                          "ایمیلی که استفاده کردید تکراری است",
+                                          "ناموفق",
+                                          "نام کاربری یا ایمیل اشتباه است",
                                           "بستن",
                                           () {
                                             Navigator.pop(context);
@@ -203,7 +221,7 @@ class _SignupPageState extends State<LoginPage> {
                                 }
                               },
                               child: const Text(
-                                'ثبت نام',
+                                'ورود',
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   color: Colors.white,
@@ -219,7 +237,15 @@ class _SignupPageState extends State<LoginPage> {
                                   vertical: 10.0,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                    child: const SignupPage(),
+                                    type: PageTransitionType.leftToRight,
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'قبلا اکانت ساختی؟',
                                 style: TextStyle(

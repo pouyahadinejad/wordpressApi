@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:plantapp/api/api_service.dart';
 import 'package:plantapp/constans/constans.dart';
 import 'package:plantapp/models/woocommercr/register_model.dart';
+import 'package:plantapp/ui/login/login_page.dart';
 import 'package:plantapp/ui/signup/custom_form_field.dart';
 import 'package:plantapp/ui/utils/custom_dialog_box.dart';
 import 'package:plantapp/ui/utils/customer_appbar.dart';
@@ -179,7 +181,15 @@ class _SignupPageState extends State<SignupPage> {
                                   vertical: 10.0,
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                    child: const LoginPage(),
+                                    type: PageTransitionType.leftToRight,
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'قبلا اکانت ساختی؟',
                                 style: TextStyle(
