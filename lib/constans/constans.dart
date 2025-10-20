@@ -7,6 +7,7 @@ class WoocomerceInfo {
   static String consumerSecret = "cs_73dc1cbfcbfe7e110247a9d29abddebc8fbd60a4";
   static String baseURL = "https://pouyahadinejad.ir/wordpress/wp-json/wc/v3/";
   static String customerURL = "customers";
+  static String productURL = 'products';
 }
 
 class Constans {
