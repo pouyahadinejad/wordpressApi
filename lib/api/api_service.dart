@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:plantapp/constans/constans.dart';
 import 'package:plantapp/models/woocommercr/login_model.dart';
+import 'package:plantapp/models/woocommercr/product_model.dart';
 import 'package:plantapp/models/woocommercr/register_model.dart';
 
 class ApiService {
@@ -57,5 +58,29 @@ class ApiService {
       throw 'Error $e';
     }
     return loginModel;
+  }
+
+  Future<List<Product>> getProducts() async {
+    final String productURL =
+        "${WoocomerceInfo.baseURL}${WoocomerceInfo.productURL}?consumer_key=${WoocomerceInfo.consumerKey}&consumer_secret=${WoocomerceInfo.consumerSecret}";
+    List<Product> productList = <Product>[];
+    try {
+      Response response = await Dio().get(
+        productURL,
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        }),
+      );
+      if (response.statusCode == 200) {
+        productList = (response.data as List)
+            .map(
+              (i) => Product.fromJson(i),
+            )
+            .toList();
+      }
+    } on DioError catch (e) {
+      throw 'Error $e';
+    }
+    return productList;
   }
 }
